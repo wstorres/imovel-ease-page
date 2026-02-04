@@ -1,92 +1,98 @@
 import { motion } from "framer-motion";
-import { MessageSquare, Search, FileEdit, CheckCircle } from "lucide-react";
+import { MessageSquare, Search, FileEdit, CheckCircle, ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const steps = [
   {
     icon: MessageSquare,
-    step: "01",
-    title: "Consulta Inicial",
-    description: "Entre em contato conosco para uma análise gratuita da situação do seu imóvel.",
+    step: "1",
+    title: "Você entra em contato",
+    description: "Preencha o formulário ou ligue para nós",
   },
   {
     icon: Search,
-    step: "02",
-    title: "Diagnóstico",
-    description: "Nossa equipe realiza um levantamento completo da documentação e identifica as pendências.",
+    step: "2",
+    title: "Analisamos seu caso",
+    description: "Diagnóstico gratuito da situação",
   },
   {
     icon: FileEdit,
-    step: "03",
-    title: "Regularização",
-    description: "Iniciamos o processo de regularização junto aos órgãos competentes e cartórios.",
+    step: "3",
+    title: "Iniciamos o processo",
+    description: "Cuidamos de toda a burocracia",
   },
   {
     icon: CheckCircle,
-    step: "04",
-    title: "Conclusão",
-    description: "Entregamos toda a documentação regularizada com total segurança jurídica.",
+    step: "4",
+    title: "Imóvel regularizado",
+    description: "Documentação completa em mãos",
   },
 ];
 
 const Process = () => {
   return (
-    <section id="processo" className="section-padding bg-background">
+    <section id="processo" className="section-padding bg-primary text-primary-foreground">
       <div className="container-custom">
-        {/* Section Header */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center max-w-2xl mx-auto mb-16"
+          className="text-center max-w-2xl mx-auto mb-12"
         >
           <span className="text-secondary font-semibold text-sm uppercase tracking-wider">
-            Como Funciona
+            Simples e Rápido
           </span>
-          <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mt-3 mb-4">
-            Processo Simples e{" "}
-            <span className="text-gradient-gold">Transparente</span>
+          <h2 className="font-display text-3xl md:text-4xl font-bold mt-3 mb-4">
+            Como <span className="text-gradient-gold">Funciona</span>
           </h2>
-          <p className="text-muted-foreground text-lg">
-            Conduzimos todo o processo de forma clara, mantendo você informado em cada etapa.
-          </p>
         </motion.div>
 
-        {/* Process Steps */}
-        <div className="relative">
-          {/* Connection Line */}
-          <div className="hidden lg:block absolute top-24 left-0 right-0 h-0.5 bg-border" />
+        {/* Steps */}
+        <div className="grid md:grid-cols-4 gap-8 mb-12">
+          {steps.map((step, index) => (
+            <motion.div
+              key={step.step}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.1 }}
+              className="text-center relative"
+            >
+              {/* Connector Line */}
+              {index < steps.length - 1 && (
+                <div className="hidden md:block absolute top-10 left-[60%] w-[80%] h-0.5 bg-primary-foreground/20" />
+              )}
+              
+              <div className="relative z-10 w-20 h-20 mx-auto mb-4 bg-secondary/20 rounded-2xl flex items-center justify-center">
+                <step.icon className="w-9 h-9 text-secondary" />
+                <span className="absolute -top-2 -right-2 w-8 h-8 bg-secondary rounded-full flex items-center justify-center text-secondary-foreground font-bold text-sm">
+                  {step.step}
+                </span>
+              </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {steps.map((step, index) => (
-              <motion.div
-                key={step.step}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.15 }}
-                className="relative text-center"
-              >
-                {/* Step Number Circle */}
-                <div className="relative z-10 w-20 h-20 mx-auto mb-6 bg-primary rounded-2xl flex items-center justify-center shadow-elevated">
-                  <step.icon className="w-9 h-9 text-primary-foreground" />
-                </div>
-
-                {/* Step Number Badge */}
-                <div className="absolute top-0 right-1/2 translate-x-12 -translate-y-1 w-8 h-8 bg-secondary rounded-full flex items-center justify-center">
-                  <span className="text-secondary-foreground font-bold text-sm">{step.step}</span>
-                </div>
-
-                <h3 className="font-display text-xl font-semibold text-foreground mb-3">
-                  {step.title}
-                </h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  {step.description}
-                </p>
-              </motion.div>
-            ))}
-          </div>
+              <h3 className="font-display text-lg font-semibold mb-2">
+                {step.title}
+              </h3>
+              <p className="text-primary-foreground/70 text-sm">
+                {step.description}
+              </p>
+            </motion.div>
+          ))}
         </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center"
+        >
+          <a href="#formulario">
+            <Button size="lg" className="btn-secondary rounded-full px-8">
+              Começar Agora
+              <ArrowRight className="ml-2 w-5 h-5" />
+            </Button>
+          </a>
+        </motion.div>
       </div>
     </section>
   );

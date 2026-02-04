@@ -1,101 +1,75 @@
 import { motion } from "framer-motion";
-import { TrendingUp, ShieldCheck, Users, Clock, Award, HeartHandshake } from "lucide-react";
+import { TrendingUp, ShieldCheck, Clock, Award, ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const benefits = [
   {
     icon: TrendingUp,
-    title: "Valorização do Imóvel",
-    description: "Um imóvel regularizado pode valer até 30% mais no mercado imobiliário.",
+    title: "Valorização de até 30%",
+    description: "Imóvel regularizado vale muito mais no mercado.",
   },
   {
     icon: ShieldCheck,
-    title: "Segurança Jurídica",
-    description: "Proteja seu patrimônio contra disputas e problemas legais futuros.",
-  },
-  {
-    icon: Users,
-    title: "Equipe Especializada",
-    description: "Profissionais experientes em direito imobiliário e engenharia.",
+    title: "Segurança Jurídica Total",
+    description: "Proteja seu patrimônio contra disputas e problemas.",
   },
   {
     icon: Clock,
-    title: "Agilidade no Processo",
-    description: "Conhecemos os caminhos mais eficientes para cada tipo de regularização.",
+    title: "Processo Ágil",
+    description: "Conhecemos os caminhos mais rápidos para resolver.",
   },
   {
     icon: Award,
-    title: "Credibilidade",
-    description: "Mais de 15 anos de experiência e milhares de imóveis regularizados.",
-  },
-  {
-    icon: HeartHandshake,
-    title: "Atendimento Personalizado",
-    description: "Cada caso é único e merece atenção especial da nossa equipe.",
+    title: "15+ Anos de Experiência",
+    description: "Equipe especializada em direito imobiliário.",
   },
 ];
 
 const Benefits = () => {
   return (
-    <section id="beneficios" className="section-padding bg-primary text-primary-foreground">
+    <section id="beneficios" className="section-padding bg-background">
       <div className="container-custom">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
-          {/* Left Column */}
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          {/* Left */}
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
+            initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
           >
             <span className="text-secondary font-semibold text-sm uppercase tracking-wider">
               Por Que Nos Escolher
             </span>
-            <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold mt-3 mb-6">
-              Benefícios de{" "}
-              <span className="text-gradient-gold">Regularizar</span>{" "}
-              Seu Imóvel
+            <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mt-3 mb-6">
+              Resultados <span className="text-gradient-gold">Garantidos</span>
             </h2>
-            <p className="text-primary-foreground/80 text-lg mb-8">
-              A regularização do seu imóvel traz inúmeras vantagens, desde a valorização patrimonial até a tranquilidade de saber que sua propriedade está legalmente protegida.
+            <p className="text-muted-foreground text-lg mb-8">
+              Somos especialistas em regularização imobiliária e já ajudamos mais de 2.500 famílias a resolverem a situação de seus imóveis.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-secondary/20 rounded-xl flex items-center justify-center">
-                  <Award className="w-6 h-6 text-secondary" />
-                </div>
-                <div>
-                  <p className="text-2xl font-display font-bold">2.500+</p>
-                  <p className="text-primary-foreground/70 text-sm">Imóveis Regularizados</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-secondary/20 rounded-xl flex items-center justify-center">
-                  <Users className="w-6 h-6 text-secondary" />
-                </div>
-                <div>
-                  <p className="text-2xl font-display font-bold">98%</p>
-                  <p className="text-primary-foreground/70 text-sm">Clientes Satisfeitos</p>
-                </div>
-              </div>
-            </div>
+            <a href="#formulario">
+              <Button size="lg" className="btn-secondary rounded-full">
+                Quero Regularizar Meu Imóvel
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </Button>
+            </a>
           </motion.div>
 
-          {/* Right Column - Benefits Grid */}
-          <div className="grid sm:grid-cols-2 gap-4">
+          {/* Right - Benefits Grid */}
+          <div className="grid sm:grid-cols-2 gap-5">
             {benefits.map((benefit, index) => (
               <motion.div
                 key={benefit.title}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="p-5 bg-primary-foreground/5 rounded-xl border border-primary-foreground/10 hover:bg-primary-foreground/10 transition-colors"
+                transition={{ delay: index * 0.1 }}
+                className="p-5 bg-muted/50 rounded-xl border border-border hover:border-secondary/30 transition-colors"
               >
-                <benefit.icon className="w-8 h-8 text-secondary mb-3" />
-                <h3 className="font-display font-semibold text-lg mb-2">
+                <benefit.icon className="w-10 h-10 text-secondary mb-3" />
+                <h3 className="font-display font-semibold text-lg text-foreground mb-2">
                   {benefit.title}
                 </h3>
-                <p className="text-primary-foreground/70 text-sm leading-relaxed">
+                <p className="text-muted-foreground text-sm">
                   {benefit.description}
                 </p>
               </motion.div>
