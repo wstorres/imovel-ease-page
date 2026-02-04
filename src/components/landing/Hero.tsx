@@ -1,128 +1,211 @@
 import { motion } from "framer-motion";
-import { ArrowRight, Shield, FileCheck, Clock } from "lucide-react";
+import { Shield, CheckCircle, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useState } from "react";
+import { toast } from "@/hooks/use-toast";
 import heroBg from "@/assets/hero-bg.jpg";
 
 const Hero = () => {
-  const stats = [
-    { icon: FileCheck, value: "2.500+", label: "Imóveis Regularizados" },
-    { icon: Clock, value: "15+", label: "Anos de Experiência" },
-    { icon: Shield, value: "100%", label: "Segurança Jurídica" },
+  const [formData, setFormData] = useState({
+    name: "",
+    phone: "",
+    service: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    setTimeout(() => {
+      toast({
+        title: "✅ Solicitação enviada!",
+        description: "Nossa equipe entrará em contato em até 2 horas.",
+      });
+      setFormData({ name: "", phone: "", service: "" });
+      setIsSubmitting(false);
+    }, 1000);
+  };
+
+  const benefits = [
+    "Análise gratuita do seu caso",
+    "Retorno em até 2 horas",
+    "Sem compromisso",
   ];
 
   return (
     <section id="inicio" className="relative min-h-screen flex items-center pt-20">
-      {/* Background Image */}
+      {/* Background */}
       <div className="absolute inset-0 z-0">
-        <img
-          src={heroBg}
-          alt="Cidade moderna"
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/85 to-primary/70" />
+        <img src={heroBg} alt="Cidade" className="w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/90 to-primary/75" />
       </div>
 
       {/* Content */}
-      <div className="container-custom relative z-10 py-20">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Left Column */}
+      <div className="container-custom relative z-10 py-12 lg:py-20">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          {/* Left - Text */}
           <div className="text-primary-foreground">
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
+              transition={{ duration: 0.5 }}
             >
-              <span className="inline-flex items-center gap-2 px-4 py-2 bg-secondary/20 rounded-full text-secondary text-sm font-medium mb-6">
+              <span className="inline-flex items-center gap-2 px-4 py-2 bg-secondary/20 rounded-full text-secondary text-sm font-semibold mb-6">
                 <Shield className="w-4 h-4" />
-                Especialistas em Regularização
+                Mais de 2.500 imóveis regularizados
               </span>
             </motion.div>
 
             <motion.h1
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="font-display text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6"
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="font-display text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight mb-6"
             >
-              Seu Imóvel{" "}
-              <span className="text-gradient-gold">Regularizado</span>{" "}
-              com Segurança
+              Seu Imóvel Está{" "}
+              <span className="text-gradient-gold">Irregular?</span>
             </motion.h1>
 
             <motion.p
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-lg text-primary-foreground/80 mb-8 max-w-xl"
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="text-lg md:text-xl text-primary-foreground/90 mb-8 max-w-lg"
             >
-              Somos especialistas em regularização de imóveis. Transformamos a situação do seu patrimônio com agilidade, transparência e total segurança jurídica.
+              Resolva <strong>de uma vez por todas</strong> a documentação do seu imóvel. 
+              Evite problemas na venda, financiamento ou herança.
             </motion.p>
 
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="flex flex-col sm:flex-row gap-4"
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="space-y-3 mb-8"
             >
-              <Button size="lg" className="btn-secondary rounded-full px-8 text-base">
-                Solicite uma Análise Gratuita
-                <ArrowRight className="ml-2 w-5 h-5" />
-              </Button>
-              <Button size="lg" variant="outline" className="btn-outline-light rounded-full px-8 text-base">
-                Conheça Nossos Serviços
-              </Button>
+              {benefits.map((benefit, index) => (
+                <div key={index} className="flex items-center gap-3">
+                  <CheckCircle className="w-5 h-5 text-secondary flex-shrink-0" />
+                  <span className="text-primary-foreground/90">{benefit}</span>
+                </div>
+              ))}
+            </motion.div>
+
+            {/* Mobile CTA */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="lg:hidden"
+            >
+              <a href="#formulario">
+                <Button size="lg" className="btn-secondary rounded-full w-full text-base h-14">
+                  Solicitar Análise Gratuita
+                </Button>
+              </a>
             </motion.div>
           </div>
 
-          {/* Right Column - Stats */}
+          {/* Right - Form */}
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="hidden lg:block"
+            initial={{ opacity: 0, x: 30, scale: 0.95 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            id="formulario"
+            className="scroll-mt-24"
           >
-            <div className="bg-card/10 backdrop-blur-md rounded-2xl p-8 border border-primary-foreground/10">
-              <div className="grid gap-6">
-                {stats.map((stat, index) => (
-                  <motion.div
-                    key={stat.label}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5, delay: 0.5 + index * 0.1 }}
-                    className="flex items-center gap-4 p-4 bg-primary-foreground/5 rounded-xl"
+            <div className="bg-card rounded-2xl p-6 md:p-8 shadow-elevated border border-border/50">
+              {/* Form Header */}
+              <div className="text-center mb-6">
+                <div className="inline-flex items-center gap-2 px-3 py-1 bg-success-muted text-success rounded-full text-sm font-medium mb-3">
+                  <span className="w-2 h-2 bg-success rounded-full animate-pulse" />
+                  Atendimento disponível agora
+                </div>
+                <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground">
+                  Análise <span className="text-secondary">Gratuita</span>
+                </h2>
+                <p className="text-muted-foreground mt-2">
+                  Preencha e receba uma avaliação em até 2 horas
+                </p>
+              </div>
+
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div>
+                  <Input
+                    placeholder="Seu nome completo"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    className="h-14 text-base px-4 bg-muted/50 border-border"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <Input
+                    type="tel"
+                    placeholder="WhatsApp (com DDD)"
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    className="h-14 text-base px-4 bg-muted/50 border-border"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <Select
+                    value={formData.service}
+                    onValueChange={(value) => setFormData({ ...formData, service: value })}
+                    required
                   >
-                    <div className="w-14 h-14 bg-secondary/20 rounded-xl flex items-center justify-center">
-                      <stat.icon className="w-7 h-7 text-secondary" />
-                    </div>
-                    <div>
-                      <p className="text-3xl font-display font-bold text-primary-foreground">
-                        {stat.value}
-                      </p>
-                      <p className="text-primary-foreground/70 text-sm">{stat.label}</p>
-                    </div>
-                  </motion.div>
-                ))}
+                    <SelectTrigger className="h-14 text-base px-4 bg-muted/50 border-border">
+                      <SelectValue placeholder="Qual serviço você precisa?" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="escritura">Regularização de Escritura</SelectItem>
+                      <SelectItem value="usucapiao">Usucapião</SelectItem>
+                      <SelectItem value="averbacao">Averbação de Construção</SelectItem>
+                      <SelectItem value="inventario">Inventário / Herança</SelectItem>
+                      <SelectItem value="outros">Outros / Não sei</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <Button 
+                  type="submit" 
+                  size="lg" 
+                  className="btn-secondary w-full h-14 text-base font-semibold rounded-xl"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? (
+                    "Enviando..."
+                  ) : (
+                    <>
+                      <Phone className="w-5 h-5 mr-2" />
+                      Quero Minha Análise Gratuita
+                    </>
+                  )}
+                </Button>
+              </form>
+
+              {/* Trust Badges */}
+              <div className="mt-6 pt-6 border-t border-border">
+                <div className="flex items-center justify-center gap-6 text-muted-foreground text-sm">
+                  <div className="flex items-center gap-2">
+                    <Shield className="w-4 h-4" />
+                    <span>100% Seguro</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle className="w-4 h-4" />
+                    <span>Sem compromisso</span>
+                  </div>
+                </div>
               </div>
             </div>
           </motion.div>
         </div>
       </div>
-
-      {/* Scroll Indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
-      >
-        <div className="w-6 h-10 border-2 border-primary-foreground/30 rounded-full flex justify-center pt-2">
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-            className="w-1.5 h-1.5 bg-primary-foreground/50 rounded-full"
-          />
-        </div>
-      </motion.div>
     </section>
   );
 };

@@ -52,9 +52,11 @@ const Header = () => {
               <Phone className="w-4 h-4" />
               <span className="text-sm font-medium">(11) 99999-9999</span>
             </a>
-            <Button className="btn-secondary rounded-full px-6">
-              Fale Conosco
-            </Button>
+            <a href="#formulario">
+              <Button className="btn-secondary rounded-full px-6">
+                Análise Gratuita
+              </Button>
+            </a>
           </div>
 
           {/* Mobile Menu Button */}
