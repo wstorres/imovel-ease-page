@@ -1,34 +1,10 @@
 import { motion } from "framer-motion";
-import { Shield, CheckCircle, Phone } from "lucide-react";
+import { Shield, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useState } from "react";
-import { toast } from "@/hooks/use-toast";
 import heroBg from "@/assets/hero-bg.jpg";
+import ZohoLeadForm from "./ZohoLeadForm";
 
 const Hero = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    phone: "",
-    service: "",
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    
-    setTimeout(() => {
-      toast({
-        title: "✅ Solicitação enviada!",
-        description: "Nossa equipe entrará em contato em até 2 horas.",
-      });
-      setFormData({ name: "", phone: "", service: "" });
-      setIsSubmitting(false);
-    }, 1000);
-  };
-
   const benefits = [
     "Análise gratuita do seu caso",
     "Retorno em até 2 horas",
@@ -131,63 +107,7 @@ const Hero = () => {
                 </p>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <Input
-                    placeholder="Seu nome completo"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="h-14 text-base px-4 bg-muted/50 border-border"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <Input
-                    type="tel"
-                    placeholder="WhatsApp (com DDD)"
-                    value={formData.phone}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="h-14 text-base px-4 bg-muted/50 border-border"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <Select
-                    value={formData.service}
-                    onValueChange={(value) => setFormData({ ...formData, service: value })}
-                    required
-                  >
-                    <SelectTrigger className="h-14 text-base px-4 bg-muted/50 border-border">
-                      <SelectValue placeholder="Qual serviço você precisa?" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="escritura">Regularização de Escritura</SelectItem>
-                      <SelectItem value="usucapiao">Usucapião</SelectItem>
-                      <SelectItem value="averbacao">Averbação de Construção</SelectItem>
-                      <SelectItem value="inventario">Inventário / Herança</SelectItem>
-                      <SelectItem value="outros">Outros / Não sei</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <Button 
-                  type="submit" 
-                  size="lg" 
-                  className="btn-secondary w-full h-14 text-base font-semibold rounded-xl"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? (
-                    "Enviando..."
-                  ) : (
-                    <>
-                      <Phone className="w-5 h-5 mr-2" />
-                      Quero Minha Análise Gratuita
-                    </>
-                  )}
-                </Button>
-              </form>
+              <ZohoLeadForm buttonText="Quero Minha Análise Gratuita" />
 
               {/* Trust Badges */}
               <div className="mt-6 pt-6 border-t border-border">
