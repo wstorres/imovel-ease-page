@@ -1,28 +1,8 @@
 import { motion } from "framer-motion";
-import { Phone, Mail, MapPin, Send, Clock } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { useState } from "react";
-import { toast } from "@/hooks/use-toast";
+import { Phone, Mail, MapPin, Clock } from "lucide-react";
+import ZohoLeadForm from "./ZohoLeadForm";
 
 const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    message: "",
-  });
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    toast({
-      title: "Mensagem enviada!",
-      description: "Entraremos em contato em breve.",
-    });
-    setFormData({ name: "", email: "", phone: "", message: "" });
-  };
-
   const contactInfo = [
     {
       icon: Phone,
@@ -99,73 +79,13 @@ const Contact = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <form onSubmit={handleSubmit} className="bg-card rounded-2xl p-8 shadow-elevated">
+            <div className="bg-card rounded-2xl p-8 shadow-elevated">
               <h3 className="font-display text-2xl font-semibold text-foreground mb-6">
                 Solicite uma Análise Gratuita
               </h3>
 
-              <div className="space-y-4">
-                <div>
-                  <label className="text-sm font-medium text-foreground mb-1.5 block">
-                    Nome Completo
-                  </label>
-                  <Input
-                    placeholder="Seu nome"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="h-12"
-                    required
-                  />
-                </div>
-
-                <div className="grid sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-sm font-medium text-foreground mb-1.5 block">
-                      E-mail
-                    </label>
-                    <Input
-                      type="email"
-                      placeholder="seu@email.com"
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="h-12"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium text-foreground mb-1.5 block">
-                      Telefone
-                    </label>
-                    <Input
-                      type="tel"
-                      placeholder="(11) 99999-9999"
-                      value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="h-12"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="text-sm font-medium text-foreground mb-1.5 block">
-                    Mensagem
-                  </label>
-                  <Textarea
-                    placeholder="Conte-nos sobre a situação do seu imóvel..."
-                    value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    className="min-h-[120px] resize-none"
-                    required
-                  />
-                </div>
-
-                <Button type="submit" size="lg" className="btn-secondary w-full rounded-full text-base">
-                  Enviar Mensagem
-                  <Send className="ml-2 w-5 h-5" />
-                </Button>
-              </div>
-            </form>
+              <ZohoLeadForm buttonText="Enviar Solicitação" />
+            </div>
           </motion.div>
         </div>
       </div>
