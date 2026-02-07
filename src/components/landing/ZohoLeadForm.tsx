@@ -1,6 +1,6 @@
-import { useEffect, useRef } from "react";
-import { Button } from "@/components/ui/button";
-import { Phone } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Phone, CheckCircle } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
 interface ZohoLeadFormProps {
   buttonText?: string;
@@ -12,6 +12,8 @@ const ZohoLeadForm = ({
   className = ""
 }: ZohoLeadFormProps) => {
   const formRef = useRef<HTMLFormElement>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
     // Load Zoho analytics script only once
@@ -51,79 +53,108 @@ const ZohoLeadForm = ({
     }
   };
 
-  const validateEmail = (): boolean => {
-    if (!formRef.current) return true;
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!formRef.current) return;
+
+    // Validate required fields
+    const nameField = formRef.current.elements.namedItem('Last Name') as HTMLInputElement;
+    if (!nameField || nameField.value.trim().length === 0) {
+      toast({
+        title: "Campo obrigatório",
+        description: "Nome Completo não pode ficar em branco.",
+        variant: "destructive"
+      });
+      nameField?.focus();
+      return;
+    }
+
+    // Validate email if provided
     const emailField = formRef.current.elements.namedItem('Email') as HTMLInputElement;
     if (emailField && emailField.value.trim().length > 0) {
       const emailVal = emailField.value;
       const atpos = emailVal.indexOf('@');
       const dotpos = emailVal.lastIndexOf('.');
       if (atpos < 1 || dotpos < atpos + 2 || dotpos + 2 >= emailVal.length) {
-        alert('Insira um endereço de e-mail válido.');
+        toast({
+          title: "E-mail inválido",
+          description: "Insira um endereço de e-mail válido.",
+          variant: "destructive"
+        });
         emailField.focus();
-        return false;
+        return;
       }
-    }
-    return true;
-  };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    if (!formRef.current) {
-      e.preventDefault();
-      return;
-    }
-
-    // Validate required fields
-    const nameField = formRef.current.elements.namedItem('Last Name') as HTMLInputElement;
-    if (!nameField || nameField.value.trim().length === 0) {
-      e.preventDefault();
-      alert('Nome Completo não pode ficar em branco.');
-      nameField?.focus();
-      return;
-    }
-
-    // Validate email
-    if (!validateEmail()) {
-      e.preventDefault();
-      return;
     }
 
     // Track visitor before submit
     trackVisitor();
 
-    // Add smarturl if present
-    const urlparams = new URLSearchParams(window.location.search);
-    if (urlparams.has('service') && urlparams.get('service') === 'smarturl') {
-      const existingField = formRef.current.querySelector('input[name="service"]');
-      if (!existingField) {
-        const smarturlfield = document.createElement('input');
-        smarturlfield.setAttribute('type', 'hidden');
-        smarturlfield.setAttribute('value', urlparams.get('service') || '');
-        smarturlfield.setAttribute('name', 'service');
-        formRef.current.appendChild(smarturlfield);
-      }
-    }
+    // Set submitting state
+    setIsSubmitting(true);
 
-    // Disable submit button to prevent double submission
-    const submitBtn = formRef.current.querySelector('button[type="submit"]') as HTMLButtonElement;
-    if (submitBtn) {
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Enviando...';
-    }
+    try {
+      // Get form data
+      const formData = new FormData(formRef.current);
+      
+      // Submit using fetch with no-cors mode (required for cross-origin POST to Zoho)
+      await fetch('https://crm.zoho.com/crm/WebToLeadForm', {
+        method: 'POST',
+        mode: 'no-cors',
+        body: formData,
+      });
 
-    // Allow form to submit naturally to Zoho
-    console.log('Form submitting to Zoho CRM...');
+      // Since no-cors doesn't return a readable response, we assume success
+      console.log('Lead submitted to Zoho CRM');
+      
+      setIsSubmitted(true);
+      toast({
+        title: "✅ Solicitação enviada!",
+        description: "Nossa equipe entrará em contato em até 2 horas.",
+      });
+
+      // Reset form
+      formRef.current.reset();
+      
+      // Reset submitted state after 5 seconds
+      setTimeout(() => setIsSubmitted(false), 5000);
+      
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      toast({
+        title: "Erro ao enviar",
+        description: "Por favor, tente novamente ou entre em contato pelo WhatsApp.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
+  if (isSubmitted) {
+    return (
+      <div className={`space-y-4 ${className}`}>
+        <div className="flex flex-col items-center justify-center py-8 text-center">
+          <div className="w-16 h-16 bg-success/20 rounded-full flex items-center justify-center mb-4">
+            <CheckCircle className="w-8 h-8 text-success" />
+          </div>
+          <h3 className="text-xl font-semibold text-foreground mb-2">
+            Solicitação Enviada!
+          </h3>
+          <p className="text-muted-foreground">
+            Nossa equipe entrará em contato em até 2 horas.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <form
       ref={formRef}
       id="webform7234558000000592394"
-      action="https://crm.zoho.com/crm/WebToLeadForm"
       name="WebToLeads7234558000000592394"
-      method="POST"
       onSubmit={handleSubmit}
-      acceptCharset="UTF-8"
       className={`space-y-4 ${className}`}
     >
       {/* Hidden fields required by Zoho */}
@@ -131,7 +162,7 @@ const ZohoLeadForm = ({
       <input type="hidden" name="zc_gad" id="zc_gad" value="" />
       <input type="hidden" name="xmIwtLD" value="a7de0e302e7df8a7d5296aeefb4f1fe680b7e7ce2cd37dbe3ea9d2c67708e904ee8eda8e0e38330bb4dc5622dbacfdad" />
       <input type="hidden" name="actionType" value="TGVhZHM=" />
-      <input type="hidden" name="returnURL" value={typeof window !== 'undefined' ? window.location.href : ''} />
+      <input type="hidden" name="returnURL" value="" />
       <input type="hidden" id="ldeskuid" name="ldeskuid" value="" />
       <input type="hidden" id="LDTuvid" name="LDTuvid" value="" />
 
@@ -144,7 +175,6 @@ const ZohoLeadForm = ({
           maxLength={80}
           placeholder="Seu nome completo *"
           className="flex h-14 w-full rounded-md border border-border bg-muted/50 px-4 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-          required
         />
       </div>
 
@@ -173,14 +203,20 @@ const ZohoLeadForm = ({
       </div>
 
       {/* Submit Button */}
-      <Button 
+      <button 
         type="submit"
-        size="lg" 
-        className="formsubmit btn-secondary w-full h-14 text-base font-semibold rounded-xl"
+        disabled={isSubmitting}
+        className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-base font-semibold ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground hover:bg-secondary/90 w-full h-14 rounded-xl"
       >
-        <Phone className="w-5 h-5 mr-2" />
-        {buttonText}
-      </Button>
+        {isSubmitting ? (
+          "Enviando..."
+        ) : (
+          <>
+            <Phone className="w-5 h-5 mr-2" />
+            {buttonText}
+          </>
+        )}
+      </button>
     </form>
   );
 };
