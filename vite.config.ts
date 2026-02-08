@@ -5,7 +5,10 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  base: mode === "production" ? "/imovel-ease-page/" : "/",
+  // Garantimos que em produção o caminho seja sempre o do repositório
+  // No ambiente de desenvolvimento (npm run dev), o Vite ignora o base ou usa '/'
+  base: "/imovel-ease-page/", 
+  
   server: {
     host: "::",
     port: 8080,
@@ -13,7 +16,10 @@ export default defineConfig(({ mode }) => ({
       overlay: false,
     },
   },
-  plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
+  plugins: [
+    react(),
+    mode === "development" && componentTagger(),
+  ].filter(Boolean),
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
