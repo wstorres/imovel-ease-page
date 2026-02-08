@@ -4,6 +4,7 @@ import path from "path";
 
 export default defineConfig({
   plugins: [react()],
+  base: '/imovel-ease-page/', // Adicione esta linha com o nome exato do seu repo
   test: {
     environment: "jsdom",
     globals: true,
