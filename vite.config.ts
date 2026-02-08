@@ -5,10 +5,8 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  // Garantimos que em produção o caminho seja sempre o do repositório
-  // No ambiente de desenvolvimento (npm run dev), o Vite ignora o base ou usa '/'
-  base: "/imovel-ease-page/", 
-  
+  // Define caminhos relativos para garantir que o deploy funcione em qualquer subpasta
+  base: "./",
   server: {
     host: "::",
     port: 8080,
